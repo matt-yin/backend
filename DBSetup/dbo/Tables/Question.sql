@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Question]
+(
+	[QuestionId] INT IDENTITY(1,1) PRIMARY KEY,
+	[Title] NVARCHAR(255) NOT NULL,
+	[Content] NVARCHAR(max) NOT NULL,
+	[UserId] NVARCHAR(150) NOT NULL,
+	[UserName] NVARCHAR(150) NOT NULL,
+	[Created] DATETIME2(7) NOT NULL
+)
+
