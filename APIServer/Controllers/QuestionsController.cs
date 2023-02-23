@@ -29,5 +29,22 @@ namespace APIServer.Controllers
             }
             return questions;
         }
+
+        [HttpGet("unanswered")]
+        public IEnumerable<Question> GetUnansweredQuestions()
+        {
+            return _dataRepository.GetUnansweredQuestions();
+        }
+
+        [HttpGet("{questionId}")]
+        public ActionResult<Question> GetQuestion(int questionId)
+        {
+            var result = _dataRepository.GetQuestion(questionId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return result;
+        }
     }
 }
