@@ -59,9 +59,11 @@ namespace DataAccess
             return connection.Query<Question>(@"EXEC Question_Unanswered");
         }
 
-        public Answer PostAnswer(Answer answer)
+        public Answer PostAnswer(int questionId, PostAnswerRequest postAnswerRequest)
         {
-            throw new NotImplementedException();
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            return connection.QueryFirst<Answer>(@"EXEC Answer_Post @QuestionId = @QuestionId, @Content = @Content, @UserId = @UserId, @UserName = @UserName, @Created = @Created", new {QuestionId = questionId, Content = postAnswerRequest.Content, UserName = postAnswerRequest.UserName, UserId = postAnswerRequest.UserId, Created = postAnswerRequest.Created});
         }
 
         public Question PostQuestion(PostQuestionRequest question)
@@ -72,9 +74,12 @@ namespace DataAccess
             return GetQuestion(questionId);
         }
 
-        public Question PutQuestion(int questionId, Question question)
+        public Question PutQuestion(int questionId, PutQuestionRequest question)
         {
-            throw new NotImplementedException();
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+            connection.Execute(@"EXEC Question_Put @QuestionId = @QuestionId, @Title = @Title, @Content = @Content", new {questionId, question.Title, question.Content});
+            return GetQuestion(questionId);
         }
 
         public bool QuestionExists(int questionId)

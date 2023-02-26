@@ -46,5 +46,56 @@ namespace APIServer.Controllers
             }
             return result;
         }
+
+        [HttpPost]
+        public ActionResult<Question> PostQuestion(PostQuestionRequest question)
+        {
+            var result = _dataRepository.PostQuestion(question);
+            return CreatedAtAction(nameof(GetQuestion), new { questionId = result.QuestionId}, result);
+        }
+
+        [HttpPut("{questionId}")]
+        public ActionResult<Question> PutQuestion(int questionId, PutQuestionRequest putQuestionRequest)
+        {
+            var question = _dataRepository.GetQuestion(questionId);
+
+            if(question == null)
+            {
+                return NotFound();
+            }
+
+            putQuestionRequest.Title = string.IsNullOrEmpty(putQuestionRequest.Title) ? question.Title : putQuestionRequest.Title;
+            putQuestionRequest.Content = string.IsNullOrEmpty(putQuestionRequest.Content)?question.Content: putQuestionRequest.Content;
+
+            var savedQuestion = _dataRepository.PutQuestion(questionId, putQuestionRequest);
+            return savedQuestion;
+        }
+
+        [HttpDelete("{questionId}")]
+        public ActionResult DeleteQuestion(int questionId)
+        {
+            var question = GetQuestion(questionId);
+
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            _dataRepository.DeleteQuestion(questionId);
+            return NoContent();
+        }
+
+        [HttpPost("{questionId}/answer")]
+        public ActionResult<Answer> PostAnswer(int questionId, PostAnswerRequest answerRequest)
+        {
+            var questionExists = _dataRepository.QuestionExists(questionId);
+            if (!questionExists)
+            {
+                return NotFound();
+            }
+
+            return _dataRepository.PostAnswer(questionId, answerRequest);
+        }
+
     }
 }

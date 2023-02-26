@@ -9,4 +9,12 @@ BEGIN
 
   INSERT INTO [dbo].[Answer] (Content, UserId, UserName, Created, QuestionId)
     VALUES (@Content, @UserId, @UserName, @Created, @QuestionId)
+
+  SELECT
+    AnswerId,
+    Content,
+    UserName,
+    Created
+  FROM [dbo].[Answer]
+  WHERE AnswerId = SCOPE_IDENTITY()
 END

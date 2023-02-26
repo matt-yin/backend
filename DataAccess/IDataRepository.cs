@@ -11,9 +11,9 @@ namespace DataAccess
         bool QuestionExists(int questionId);
         Answer GetAnswer(int answerId);
         Question PostQuestion(PostQuestionRequest question);
-        Question PutQuestion(int questionId, Question question);
+        Question PutQuestion(int questionId, PutQuestionRequest question);
         void DeleteQuestion(int questionId);
-        Answer PostAnswer(Answer answer);
+        Answer PostAnswer(int questionId, PostAnswerRequest answer);
 
     }
 }
