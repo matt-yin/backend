@@ -1,8 +1,11 @@
-﻿namespace DataAccess.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DataAccess.Models
 {
     public class PutQuestionRequest
     {
-        public string Title { get; set; }
-        public string Content { get; set; }
+        [StringLength(255)]
+        public string? Title { get; set; }
+        public string? Content { get; set; }
     }
 }
