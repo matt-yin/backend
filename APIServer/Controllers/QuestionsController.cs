@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using APIServer.Models.Requests;
+using DataAccess;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,8 +49,16 @@ namespace APIServer.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Question> PostQuestion(PostQuestionRequest question)
+        public ActionResult<Question> PostQuestion(PostQuestionRequestDto questionDto)
         {
+            var question = new PostQuestionRequest
+            {
+                Title = questionDto.Title,
+                Content = questionDto.Content,
+                UserId = 1,
+                UserName = "bob.test@test.com",
+                Created = DateTime.UtcNow
+            };
             var result = _dataRepository.PostQuestion(question);
             return CreatedAtAction(nameof(GetQuestion), new { questionId = result.QuestionId}, result);
         }
@@ -86,7 +95,7 @@ namespace APIServer.Controllers
         }
 
         [HttpPost("{questionId}/answer")]
-        public ActionResult<Answer> PostAnswer(int questionId, PostAnswerRequest answerRequest)
+        public ActionResult<Answer> PostAnswer(int questionId, PostAnswerRequestDto answerDto)
         {
             var questionExists = _dataRepository.QuestionExists(questionId);
             if (!questionExists)
@@ -94,7 +103,14 @@ namespace APIServer.Controllers
                 return NotFound();
             }
 
-            return _dataRepository.PostAnswer(questionId, answerRequest);
+            var answer = new PostAnswerRequest
+            {
+                Content = answerDto.Content,
+                UserId = 1,
+                UserName = "bob.test@test.com",
+                Created = DateTime.UtcNow
+            };
+            return _dataRepository.PostAnswer(questionId, answer);
         }
 
     }
